@@ -96,7 +96,7 @@ export class AuthService {
       .auth.getUser(token);
 
     if (error) {
-      this.request.context.logger.error("Can not verify token");
+      this.request.context.logger.error("Can not verify token", { error });
       throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
     }
 

@@ -13,7 +13,7 @@ export class SupabaseService {
   ) {
     this.supabaseClient = createClient<Database>(
       this.configService.get<string>("SUPABASE_URL") as string,
-      this.configService.get<string>("SUPABASE_ANON_KEY") as string,
+      this.configService.get<string>("SUPABASE_KEY") as string,
     );
   }
 
