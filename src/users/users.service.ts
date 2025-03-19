@@ -1,14 +1,9 @@
 import { PaginationQuery } from "@/common/queries/pagination.query";
 import { EnvironmentVariables } from "@/common/types/env.type";
-import { ErrorCode } from "@/common/types/error.type";
+import { convertErrorCodeToException } from "@/common/utils/error.utils";
 import { transformPaginationResponse } from "@/common/utils/pagination.utils";
 import { SupabaseService } from "@/third-parties/supabase.service";
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Scope,
-} from "@nestjs/common";
+import { Inject, Injectable, Scope } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
@@ -41,7 +36,7 @@ export class UsersService {
 
     if (error) {
       this.request.context.logger.error("Create user failed", { error });
-      throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw convertErrorCodeToException(error.status);
     }
 
     return data;
@@ -59,7 +54,7 @@ export class UsersService {
 
     if (error) {
       this.request.context.logger.error("Get users failed", { error });
-      throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw convertErrorCodeToException(error.status);
     }
 
     return {

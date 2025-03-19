@@ -1,5 +1,6 @@
 import { EnvironmentVariables } from "@/common/types/env.type";
 import { ErrorCode } from "@/common/types/error.type";
+import { convertErrorCodeToException } from "@/common/utils/error.utils";
 import { SupabaseService } from "@/third-parties/supabase.service";
 import { UserRole } from "@/users/users.type";
 import {
@@ -7,7 +8,6 @@ import {
   Injectable,
   InternalServerErrorException,
   Scope,
-  UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { REQUEST } from "@nestjs/core";
@@ -97,7 +97,7 @@ export class AuthService {
 
     if (error) {
       this.request.context.logger.error("Can not verify token", { error });
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
+      throw convertErrorCodeToException(error.status);
     }
 
     return {
@@ -119,7 +119,7 @@ export class AuthService {
 
     if (error) {
       this.request.context.logger.error("Can not refresh token", { error });
-      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
+      throw convertErrorCodeToException(error.status);
     }
 
     if (!data.session) {
@@ -140,7 +140,7 @@ export class AuthService {
       this.request.context.logger.error("Can not create user", {
         message: JSON.stringify(authResponse.error),
       });
-      throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw convertErrorCodeToException(authResponse.error.status);
     }
 
     const { user, session } = authResponse.data;

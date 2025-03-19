@@ -1,4 +1,5 @@
 import { ErrorCode } from "@/common/types/error.type";
+import { convertErrorCodeToException } from "@/common/utils/error.utils";
 import {
   transformPaginationQuery,
   transformPaginationResponse,
@@ -9,7 +10,6 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   Scope,
 } from "@nestjs/common";
@@ -44,7 +44,7 @@ export class TasksService {
       await this.assertTask(dto.parentTaskId);
     }
 
-    const response = await this.supabaseService
+    const { data, error, status } = await this.supabaseService
       .getClient()
       .from("Tasks")
       .insert({
@@ -57,7 +57,12 @@ export class TasksService {
       .select()
       .single();
 
-    return response;
+    if (error) {
+      this.request.context.logger.error("Create task failed", { error });
+      throw convertErrorCodeToException(status);
+    }
+
+    return data;
   }
 
   async getTasks(query: GetTasksQuery) {
@@ -81,7 +86,7 @@ export class TasksService {
       supabaseQuery.eq("status", query.status);
     }
 
-    const { data, error, count } = await supabaseQuery
+    const { data, error, count, status } = await supabaseQuery
       .or(
         // We can assign task for admin
         // In case the authorized user is admin, they can get tasks that are assigned to them or created by them
@@ -95,7 +100,7 @@ export class TasksService {
 
     if (error) {
       this.request.context.logger.error("Get tasks failed", { error });
-      throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw convertErrorCodeToException(status);
     }
 
     return {
@@ -162,7 +167,7 @@ export class TasksService {
       }
     }
 
-    const response = await this.supabaseService
+    const { data, error, status } = await this.supabaseService
       .getClient()
       .from("Tasks")
       .update({
@@ -176,7 +181,12 @@ export class TasksService {
       .select()
       .single();
 
-    return response;
+    if (error) {
+      this.request.context.logger.error("Update task failed", { error });
+      throw convertErrorCodeToException(status);
+    }
+
+    return data;
   }
 
   async deleteTask(taskId: string) {
@@ -186,11 +196,16 @@ export class TasksService {
 
     // TODO: We can consider to check that only creator can delete the task
 
-    await this.supabaseService
+    const { error, status } = await this.supabaseService
       .getClient()
       .from("Tasks")
       .delete()
       .eq("id", taskId);
+
+    if (error) {
+      this.request.context.logger.error("Delete task failed", { error });
+      throw convertErrorCodeToException(status);
+    }
 
     return {
       success: true,
@@ -224,7 +239,7 @@ export class TasksService {
       supabaseQuery.eq("status", query.status);
     }
 
-    const { data, error, count } = await supabaseQuery
+    const { data, error, count, status } = await supabaseQuery
       .order(query.orderBy || "createdAt", {
         ascending: query.ascending,
         nullsFirst: query.nullFirst,
@@ -233,7 +248,7 @@ export class TasksService {
 
     if (error) {
       this.request.context.logger.error("Get sub tasks failed", { error });
-      throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw convertErrorCodeToException(status);
     }
 
     return {
@@ -249,20 +264,20 @@ export class TasksService {
   private async assertTask(taskId: string) {
     this.request.context.logger.info("Assert task", { taskId });
 
-    const response = await this.supabaseService
+    const { data, error, status } = await this.supabaseService
       .getClient()
       .from("Tasks")
       .select()
       .eq("id", taskId)
       .single();
 
-    if (response.error) {
+    if (error) {
       this.request.context.logger.error("Error while asserting the task", {
-        error: response.error,
+        error: error,
       });
-      throw new NotFoundException(ErrorCode.TASK_NOT_FOUND);
+      throw convertErrorCodeToException(status);
     }
 
-    return response.data as Task;
+    return data as Task;
   }
 }
