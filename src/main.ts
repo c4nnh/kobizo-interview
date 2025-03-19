@@ -1,14 +1,22 @@
 import { ClassSerializerInterceptor, ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { NestFactory, Reflector } from "@nestjs/core";
+import { HttpAdapterHost, NestFactory, Reflector } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { SentryGlobalFilter } from "@sentry/nestjs/setup";
 import { AppModule } from "./app.module";
 import { EnvironmentVariables } from "./common/types/env.type";
+import { SentryService } from "./third-parties/sentry.service";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const sentryService = app.get(SentryService);
 
   app.enableCors();
+
+  sentryService.init();
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new SentryGlobalFilter(httpAdapter));
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalPipes(

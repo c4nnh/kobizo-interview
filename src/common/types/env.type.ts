@@ -6,4 +6,7 @@ export type EnvironmentVariables = {
   EMAIL_CONFIRMATION_URL: string;
   BETTER_STACK_SOURCE_TOKEN?: string;
   SENTRY_DSN?: string;
+  SENTRY_AUTH_TOKEN?: string;
+  SENTRY_ORG?: string;
+  SENTRY_PROJECT?: string;
 };

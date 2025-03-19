@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { SentryModule } from "@sentry/nestjs/setup";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
@@ -12,6 +13,7 @@ import { UsersModule } from "./users/users.module";
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     ThirdPartiesModule.forRoot({ isGlobal: true }),
+    SentryModule.forRoot(),
     MiddlewaresModule,
     AuthModule,
     UsersModule,
