@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      tasks: {
+      Tasks: {
         Row: {
           assigneeId: string
           createdAt: string
@@ -45,60 +45,13 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tasks_assigneeId_fkey"
-            columns: ["assigneeId"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tasks_creatorId_fkey"
-            columns: ["creatorId"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tasks_parentId_fkey"
+            foreignKeyName: "Tasks_parentId_fkey"
             columns: ["parentId"]
             isOneToOne: false
-            referencedRelation: "tasks"
+            referencedRelation: "Tasks"
             referencedColumns: ["id"]
           },
         ]
-      }
-      users: {
-        Row: {
-          createdAt: string
-          email: string
-          emailVerified: boolean
-          id: string
-          name: string
-          password: string
-          role: string
-          updatedAt: string
-        }
-        Insert: {
-          createdAt?: string
-          email: string
-          emailVerified?: boolean
-          id?: string
-          name: string
-          password: string
-          role?: string
-          updatedAt?: string
-        }
-        Update: {
-          createdAt?: string
-          email?: string
-          emailVerified?: boolean
-          id?: string
-          name?: string
-          password?: string
-          role?: string
-          updatedAt?: string
-        }
-        Relationships: []
       }
     }
     Views: {

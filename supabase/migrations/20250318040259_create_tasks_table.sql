@@ -1,11 +1,11 @@
-CREATE TABLE tasks (
+CREATE TABLE "Tasks" (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title TEXT NOT NULL,
   description TEXT,
   status TEXT CHECK (status IN ('PENDING', 'IN_PROGRESS', 'DONE')) NOT NULL DEFAULT 'PENDING',
-  "assigneeId" UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  "creatorId" UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  "parentId" UUID REFERENCES tasks(id) ON DELETE SET NULL,
+  "assigneeId" UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  "creatorId" UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  "parentId" UUID REFERENCES "Tasks"(id) ON DELETE SET NULL,
   "createdAt" TIMESTAMP DEFAULT NOW() NOT NULL,
   "updatedAt" TIMESTAMP DEFAULT NOW() NOT NULL
 );

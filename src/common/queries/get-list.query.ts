@@ -1,19 +1,31 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsOptional } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 import { PaginationQuery } from "./pagination.query";
 
 export class GetListQuery extends PaginationQuery {
+  @IsString()
+  @IsOptional()
   @ApiPropertyOptional({
     default: "createdAt",
   })
-  @IsOptional()
   orderBy?: string = "createdAt";
 
+  @Transform(({ value }) => {
+    return [true, "true"].includes(value);
+  })
+  @IsBoolean()
+  @IsOptional()
   @ApiPropertyOptional({
     default: true,
   })
   ascending?: boolean = true;
 
+  @Transform(({ value }) => {
+    return [true, "true"].includes(value);
+  })
+  @IsBoolean()
+  @IsOptional()
   @ApiPropertyOptional({
     default: false,
   })

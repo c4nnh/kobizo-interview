@@ -28,3 +28,9 @@ export class LoginDto {
   @ApiProperty()
   password: string;
 }
+
+export class RefreshTokenDto {
+  @IsString()
+  @ApiProperty()
+  refreshToken: string;
+}

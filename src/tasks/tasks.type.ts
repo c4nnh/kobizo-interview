@@ -1,5 +1,3 @@
-import { User } from "@/users/users.type";
-
 export enum TaskStatus {
   PENDING = "PENDING",
   IN_PROGRESS = "IN_PROGRESS",
@@ -11,7 +9,7 @@ export type Task = {
   title: string;
   description?: string;
   status: TaskStatus;
-  assignee: User;
-  creator: User;
-  parent?: Task;
+  assigneeId: string;
+  creatorId: string;
+  parentId?: Task;
 };

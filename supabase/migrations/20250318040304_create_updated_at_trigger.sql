@@ -8,11 +8,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER set_timestamp
-BEFORE UPDATE ON users
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER set_timestamp
-BEFORE UPDATE ON tasks
+BEFORE UPDATE ON "Tasks"
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();

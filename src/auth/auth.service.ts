@@ -108,6 +108,33 @@ export class AuthService {
     };
   }
 
+  async refreshToken(refreshToken: string) {
+    this.request.context.logger.info("Refresh token", {
+      refreshToken,
+    });
+
+    const { data, error } = await this.supabaseService
+      .getClient()
+      .auth.refreshSession({ refresh_token: refreshToken });
+
+    if (error) {
+      this.request.context.logger.error("Can not refresh token", { error });
+      throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
+    }
+
+    if (!data.session) {
+      this.request.context.logger.error("No session");
+      throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR);
+    }
+
+    return {
+      accessToken: data.session.access_token,
+      refreshToken: data.session.refresh_token,
+      expiredIn: data.session.expires_in,
+      expiredAt: data.session.expires_at,
+    };
+  }
+
   private assertAuthResponse(authResponse: AuthResponse) {
     if (authResponse.error) {
       this.request.context.logger.error("Can not create user", {
