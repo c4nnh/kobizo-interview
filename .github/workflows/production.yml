@@ -19,7 +19,7 @@ jobs:
       - name: Deploy server app
         run: |
           # Download Doppler secrets
-          doppler secrets download --project server --config prd --format env --no-file > .env
+          doppler secrets download --project kobizo-server --config prd --format env --no-file > .env
           if [ $? -ne 0 ]; then
             echo "Failed to download .env for server from Doppler."
             exit 1
