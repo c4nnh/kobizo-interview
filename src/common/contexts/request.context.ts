@@ -19,10 +19,12 @@ export class RequestContext {
     // Init logger
     this.logger.appendData({ requestId });
 
+    const { password: _, ...body } = this.req.body || {};
+
     this.logger.info("Incoming request", {
       method: this.req.method,
       path: this.req.path,
-      body: this.req.body,
+      body,
       query: this.req.query,
     });
 
