@@ -136,7 +136,7 @@ export class AuthService {
 
   private assertAuthResponse(authResponse: AuthResponse) {
     if (authResponse.error) {
-      this.request.context.logger.error("Can not create user", {
+      this.request.context.logger.error("Error while asserting auth response", {
         message: JSON.stringify(authResponse.error),
       });
       throw convertErrorCodeToException(authResponse.error.status);

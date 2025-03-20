@@ -269,13 +269,18 @@ export class TasksService {
       .from("Tasks")
       .select()
       .eq("id", taskId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       this.request.context.logger.error("Error while asserting the task", {
         error: error,
       });
       throw convertErrorCodeToException(status);
+    }
+
+    if (!data) {
+      this.request.context.logger.error("Task not found", { taskId });
+      throw new NotFoundException(ErrorCode.TASK_NOT_FOUND);
     }
 
     return data as Task;
