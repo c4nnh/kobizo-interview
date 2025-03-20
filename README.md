@@ -4,6 +4,12 @@
 
 Kobizo Interview is a NestJS-based project designed to handle backend services with support for configuration management, authentication via Supabase, and logging with Sentry.
 
+## Test this API without setting up from local
+
+Host: [https://kobizo-interview.fly.dev/swagger](https://kobizo-interview.fly.dev/swagger)
+System account: system@tm.com - @Password123
+Admin account: admin+1@tm.com - @Password123
+
 ## Installation
 
 Ensure you have `pnpm` installed, then run:
