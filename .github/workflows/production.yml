@@ -1,0 +1,39 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - main
+concurrency:
+  group: production
+jobs:
+  deploy:
+    name: Deploy apps to production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - uses: dopplerhq/cli-action@v3
+
+      - name: Deploy server app
+        run: |
+          # Download Doppler secrets
+          doppler secrets download --project server --config prd --format env --no-file > .env
+          if [ $? -ne 0 ]; then
+            echo "Failed to download .env for server from Doppler."
+            exit 1
+          fi
+
+          # Deploy with Fly.io
+          if flyctl deploy --config deployments/fly/production.fly.toml \
+            --build-arg GIT_HASH_ARG=${{ github.sha }} \
+            -e SOURCE_VERSION=${{ github.sha }}; then
+            echo "Deployment status: succeeded"
+          else
+            echo "Deployment status: failed"
+            exit 1
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
