@@ -12,7 +12,7 @@ import {
   Query,
   UseGuards,
 } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CreateTaskDto, UpdateTaskDto } from "./tasks.dto";
 import { GetTasksQuery } from "./tasks.query";
 import { TasksService } from "./tasks.service";
@@ -25,21 +25,38 @@ export class TasksController {
 
   @Post()
   @Roles(UserRole.ADMIN)
+  @ApiOperation({
+    summary: "Create task",
+    description: "Create new task",
+  })
   async createTask(@Body() body: CreateTaskDto) {
     return this.tasksService.createTask(body);
   }
 
   @Get()
+  @ApiOperation({
+    summary: "Get tasks",
+    description: "Get tasks that are created by or assigned to current user",
+  })
   async getTasks(@Query() query: GetTasksQuery) {
     return this.tasksService.getTasks(query);
   }
 
   @Get(":id")
+  @ApiOperation({
+    summary: "Get task",
+    description: "Get task details",
+  })
   async getTaskDetails(@Param("id") id: string) {
     return this.tasksService.getTaskDetails(id);
   }
 
   @Get(":parentId/subtasks")
+  @ApiOperation({
+    summary: "Get sub tasks",
+    description:
+      "Get sub tasks that are children of parent task and assigned to current user",
+  })
   async getSubTasks(
     @Param("parentId") parentId: string,
     @Query() query: GetTasksQuery,
@@ -48,12 +65,20 @@ export class TasksController {
   }
 
   @Put(":id")
+  @ApiOperation({
+    summary: "Update task",
+    description: "Update information of the task",
+  })
   @Roles(UserRole.ADMIN)
   async updateTask(@Param("id") id: string, @Body() body: UpdateTaskDto) {
     return this.tasksService.updateTask(id, body);
   }
 
   @Delete(":id")
+  @ApiOperation({
+    summary: "Delete task",
+    description: "Delete task",
+  })
   @Roles(UserRole.ADMIN)
   async deleteTask(@Param("id") id: string) {
     return this.tasksService.deleteTask(id);
