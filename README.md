@@ -73,6 +73,10 @@ pnpm start:debug
 pnpm script script=create-system-user email=[admin-email] password=[password]
 ```
 
+### Setup postman
+
+Import collection and environment file from postman folder to Postman to test API
+
 ## Dependencies
 
 - **NestJS**: Core framework.

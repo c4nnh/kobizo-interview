@@ -1,0 +1,27 @@
+{
+	"id": "a42b9212-9da1-4698-a88e-baa70e952294",
+	"name": "Kobizo interview",
+	"values": [
+		{
+			"key": "localhost",
+			"value": "http://localhost:3033/api",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-03-20T03:30:12.458Z",
+	"_postman_exported_using": "Postman/11.36.2"
+}
