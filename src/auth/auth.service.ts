@@ -13,7 +13,6 @@ import { ConfigService } from "@nestjs/config";
 import { REQUEST } from "@nestjs/core";
 import { AuthResponse } from "@supabase/supabase-js";
 import { Request } from "express";
-import {} from "nestjs-supabase-auth";
 import { LoginDto, RegisterDto } from "./auth.dto";
 
 @Injectable({

@@ -15,6 +15,12 @@ export async function createSystemUser() {
     throw new Error("Please provide password");
   }
 
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(password)) {
+    throw new Error(
+      "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character",
+    );
+  }
+
   const supabase = createClient(
     process.env.SUPABASE_URL as string,
     process.env.SUPABASE_KEY as string,

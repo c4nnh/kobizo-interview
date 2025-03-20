@@ -43,10 +43,11 @@ async function bootstrap() {
   const configService =
     app.get<ConfigService<EnvironmentVariables>>(ConfigService);
   const port = configService.get<number>("PORT", { infer: true });
+  const apiBaseUrl = configService.get<string>("API_BASE_URL");
 
   await app.listen(port, () => {
     console.log(`Server is running in port ${port}`);
-    console.log(`Visit http://localhost:${port}/swagger to see Open API`);
+    console.log(`Visit ${apiBaseUrl}/swagger to see Open API`);
   });
 }
 

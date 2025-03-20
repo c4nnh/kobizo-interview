@@ -4,6 +4,7 @@ export type EnvironmentVariables = {
   SUPABASE_URL: string;
   SUPABASE_KEY: string;
   EMAIL_CONFIRMATION_URL: string;
+  API_BASE_URL: string;
   BETTER_STACK_SOURCE_TOKEN?: string;
   SENTRY_DSN?: string;
   SENTRY_AUTH_TOKEN?: string;
