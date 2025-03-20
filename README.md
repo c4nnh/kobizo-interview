@@ -7,8 +7,11 @@ Kobizo Interview is a NestJS-based project designed to handle backend services w
 ## Test this API without setting up from local
 
 Host: [https://kobizo-interview.fly.dev/swagger](https://kobizo-interview.fly.dev/swagger)
+
 System account: system@tm.com - @Password123
+
 Admin account: cannh.99+admin+1@gmail.com - @Password123
+
 User account: cannh.99+user+1@gmail.com - @Password123
 
 ## Installation
